@@ -21,17 +21,32 @@ FIREBASE_SERVICE_ACCOUNT = os.environ.get("FIREBASE_SERVICE_ACCOUNT")
 def init_firebase():
     if not firebase_admin._apps:
         try:
-            # 將 JSON 字串轉成字典憑證 (先移除多餘空白)
-            firebase_json = FIREBASE_SERVICE_ACCOUNT.strip()
-            cred_dict = json.loads(firebase_json)
+            firebase_json_str = os.environ.get("FIREBASE_SERVICE_ACCOUNT")
+            
+            # 如果是 Base64 編碼，先解碼
+            try:
+                import base64
+                firebase_json_str = base64.b64decode(firebase_json_str).decode('utf-8')
+            except:
+                # 如果解碼失敗，保持原本字串
+                pass
+            
+            # 清理可能被轉義的換行符
+            firebase_json_str = firebase_json_str.replace('\\n', '\n')
+            
+            # 解析 JSON
+            cred_dict = json.loads(firebase_json_str)
             cred = credentials.Certificate(cred_dict)
-            # ⚠️ 請將下方的 DATABASE_URL 替換為你的 Firebase 資料庫網址
             firebase_admin.initialize_app(cred, {
                 'databaseURL': 'https://ssss-42c85-default-rtdb.asia-southeast1.firebasedatabase.app/'
             })
+            print("Firebase 認證成功！")
         except json.JSONDecodeError as e:
-            print(f"Firebase 認證 JSON 解析失敗: {e}")
-            print(f"收到的內容前100字元: {FIREBASE_SERVICE_ACCOUNT[:100]}...")
+            print(f"Firebase JSON 解析失敗: {e}")
+            print(f"收到的值前 200 字元: {firebase_json_str[:200]}")
+            raise
+        except Exception as e:
+            print(f"Firebase 初始化失敗: {e}")
             raise
 # ==========================================
 # 3. 抓取 TDX 停車場 / 交通資料 (OAuth 2.0)
