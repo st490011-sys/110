@@ -20,10 +20,21 @@ FIREBASE_SERVICE_ACCOUNT = os.environ.get("FIREBASE_SERVICE_ACCOUNT")
 # ==========================================
 def init_firebase():
     if not firebase_admin._apps:
-        # 將 JSON 字串轉成字典憑證
-        cred_dict = json.loads(FIREBASE_SERVICE_ACCOUNT)
+        try:
+            # 驗證並解析 JSON 字串
+            if not FIREBASE_SERVICE_ACCOUNT:
+                raise ValueError("FIREBASE_SERVICE_ACCOUNT 環境變數未設定")
+            
+            cred_dict = json.loads(FIREBASE_SERVICE_ACCOUNT)
+        except json.JSONDecodeError as e:
+            print(f"❌ 錯誤：FIREBASE_SERVICE_ACCOUNT JSON 格式不正確: {e}")
+            print(f"接收到的內容（前 200 字）: {FIREBASE_SERVICE_ACCOUNT[:200]}")
+            raise
+        except ValueError as e:
+            print(f"❌ 錯誤：{e}")
+            raise
+        
         cred = credentials.Certificate(cred_dict)
-        # ⚠️ 請將下方的 DATABASE_URL 替換為你的 Firebase 資料庫網址
         firebase_admin.initialize_app(cred, {
             'databaseURL': 'https://ssss-42c85-default-rtdb.asia-southeast1.firebasedatabase.app/'
         })
