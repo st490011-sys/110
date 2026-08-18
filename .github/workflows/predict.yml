@@ -2,19 +2,19 @@ name: Run Prophet AI Prediction Pipeline
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # 每 30 分鐘自動執行一次
-  workflow_dispatch:        # 支援手動按鈕觸發
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
 jobs:
   run-prophet:
     runs-on: ubuntu-latest
 
     steps:
-      
-- name: Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: main
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
