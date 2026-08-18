@@ -18,6 +18,7 @@ FIREBASE_SERVICE_ACCOUNT = os.environ.get("FIREBASE_SERVICE_ACCOUNT")
 # ==========================================
 # 2. 初始化 Firebase Realtime Database
 # ==========================================
+import base64
 def init_firebase():
     if not firebase_admin._apps:
         try:
