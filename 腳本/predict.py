@@ -25,7 +25,7 @@ def init_firebase():
         cred = credentials.Certificate(cred_dict)
         # ⚠️ 請將下方的 DATABASE_URL 替換為你的 Firebase 資料庫網址
         firebase_admin.initialize_app(cred, {
-            'databaseURL': 'https://your-project-id-default-rtdb.firebaseio.com/'
+            'databaseURL': 'https://ssss-42c85-default-rtdb.asia-southeast1.firebasedatabase.app/'
         })
 
 # ==========================================
