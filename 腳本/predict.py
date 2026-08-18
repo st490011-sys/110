@@ -21,21 +21,23 @@ FIREBASE_SERVICE_ACCOUNT = os.environ.get("FIREBASE_SERVICE_ACCOUNT")
 def init_firebase():
     if not firebase_admin._apps:
         try:
-            # 將 JSON 字串轉成字典憑證
-            cred_dict = json.loads(FIREBASE_SERVICE_ACCOUNT)
+            # 驗證並解析 Firebase 服務帳戶 JSON
+            firebase_account = FIREBASE_SERVICE_ACCOUNT.strip() if FIREBASE_SERVICE_ACCOUNT else None
+            if not firebase_account:
+                raise ValueError("FIREBASE_SERVICE_ACCOUNT 環境變數未設定")
+            
+            cred_dict = json.loads(firebase_account)
             cred = credentials.Certificate(cred_dict)
             firebase_admin.initialize_app(cred, {
                 'databaseURL': 'https://ssss-42c85-default-rtdb.asia-southeast1.firebasedatabase.app/'
             })
         except json.JSONDecodeError as e:
-            print(f"❌ 錯誤：FIREBASE_SERVICE_ACCOUNT JSON 格式不正確: {e}")
+            print(f"錯誤: 無法解析 FIREBASE_SERVICE_ACCOUNT 為 JSON: {e}")
+            print(f"原始值 (前 100 字元): {FIREBASE_SERVICE_ACCOUNT[:100] if FIREBASE_SERVICE_ACCOUNT else 'None'}")
             raise
-        
-        cred = credentials.Certificate(cred_dict)
-        firebase_admin.initialize_app(cred, {
-            'databaseURL': 'https://ssss-42c85-default-rtdb.asia-southeast1.firebasedatabase.app/'
-        })
-
+        except Exception as e:
+            print(f"錯誤: Firebase 初始化失敗: {e}")
+            raise
 # ==========================================
 # 3. 抓取 TDX 停車場 / 交通資料 (OAuth 2.0)
 # ==========================================
