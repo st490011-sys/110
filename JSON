@@ -1,0 +1,11 @@
+{
+  "live_data": {
+    "current_count": 15,
+    "last_updated": 1723974400
+  },
+  "predictions": {
+    "congestion_level": "GREEN",  // GREEN(低), YELLOW(中), RED(高)
+    "predicted_count": 12,
+    "updated_at": "2026-08-18 09:50:00"
+  }
+}
