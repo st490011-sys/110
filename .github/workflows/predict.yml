@@ -27,9 +27,9 @@ jobs:
 
       - name: Execute Prediction Script
         env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          TDX_CLIENT_ID: ${{ secrets.TDX_CLIENT_ID }}
-          TDX_CLIENT_SECRET: ${{ secrets.TDX_CLIENT_SECRET }}
-          CWA_API_KEY: ${{ secrets.CWA_API_KEY }}
+          FIREBASE_SERVICE_ACCOUNT: 	3MvKBHBy6ReIvsIpWUvxZ4YuIKW4QBiLlpazEqY7
+          TDX_CLIENT_ID: st490011-9dff7012-84f0-40fa
+          TDX_CLIENT_SECRET: 2df3f2f1-7eae-4d85-8746-9f14b8d2ea30
+          CWA_API_KEY: CWA-9C6F2669-C7C4-463B-9118-0D814480EDE0
         run: |
           python 腳本/predict.py
